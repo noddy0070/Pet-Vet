@@ -34,11 +34,6 @@ The current Pets & Vets application is a **monolithic Spring Boot application** 
 - Event-driven notifications and features
 - Multi-tenant data isolation
 - Headless architecture for flexible frontend delivery
-
-**Timeline**: 12-18 months (6-month phases using Strangler Pattern)  
-**Investment**: Infrastructure modernization + team skill development  
-**Expected ROI**: 40% faster feature delivery, 60% cost reduction through cloud scaling, new market segments (SaaS play)
-
 ---
 
 ## As-Is Architecture
