@@ -19,27 +19,29 @@ import java.util.List;
 @RequestMapping("/api/owners")
 public class OwnerRestController {
 
-    private final OwnerRepository ownerRepository;
+	private final OwnerRepository ownerRepository;
 
-    @Autowired
-    public OwnerRestController(OwnerRepository ownerRepository) {
-        this.ownerRepository = ownerRepository;
-    }
+	@Autowired
+	public OwnerRestController(OwnerRepository ownerRepository) {
+		this.ownerRepository = ownerRepository;
+	}
 
-    @GetMapping("/find")
-    public ResponseEntity<List<Owner>> findOwners(@RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String lastName, BindingResult result) {
-        if (lastName == null) {
-            lastName = ""; // empty string signifies broadest possible search
-        }
+	@GetMapping("/find")
+	public ResponseEntity<List<Owner>> findOwners(@RequestParam(defaultValue = "1") int page,
+			@RequestParam(required = false) String lastName, BindingResult result) {
+		if (lastName == null) {
+			lastName = ""; // empty string signifies broadest possible search
+		}
 
-        Pageable pageable = PageRequest.of(page - 1, 5);
-        Page<Owner> ownersResults = ownerRepository.findByLastName(lastName, pageable);
+		Pageable pageable = PageRequest.of(page - 1, 5);
+		Page<Owner> ownersResults = ownerRepository.findByLastName(lastName, pageable);
 
-        if (ownersResults.isEmpty()) {
-            result.rejectValue("lastName", "notFound", "not found");
-            return ResponseEntity.noContent().build();
-        }
+		if (ownersResults.isEmpty()) {
+			result.rejectValue("lastName", "notFound", "not found");
+			return ResponseEntity.noContent().build();
+		}
 
-        return ResponseEntity.ok(ownersResults.getContent());
-    }
+		return ResponseEntity.ok(ownersResults.getContent());
+	}
+
 }

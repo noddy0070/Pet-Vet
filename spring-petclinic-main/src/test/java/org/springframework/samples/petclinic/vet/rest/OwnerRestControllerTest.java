@@ -22,37 +22,36 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(OwnerRestController.class)
 public class OwnerRestControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-    @MockBean
-    private OwnerRepository ownerRepository;
+	@MockBean
+	private OwnerRepository ownerRepository;
 
-    @Test
-    public void testFindOwners() throws Exception {
-        Owner owner = new Owner();
-        owner.setLastName("Doe");
+	@Test
+	public void testFindOwners() throws Exception {
+		Owner owner = new Owner();
+		owner.setLastName("Doe");
 
-        Page<Owner> ownerPage = new PageImpl<>(Collections.singletonList(owner), PageRequest.of(0, 5), 1);
-        when(ownerRepository.findByLastName("Doe", PageRequest.of(0, 5))).thenReturn(ownerPage);
+		Page<Owner> ownerPage = new PageImpl<>(Collections.singletonList(owner), PageRequest.of(0, 5), 1);
+		when(ownerRepository.findByLastName("Doe", PageRequest.of(0, 5))).thenReturn(ownerPage);
 
-        mockMvc.perform(get("/api/owners/find")
-                .param("page", "1")
-                .param("lastName", "Doe")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-    }
+		mockMvc.perform(
+				get("/api/owners/find").param("page", "1").param("lastName", "Doe").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(MediaType.APPLICATION_JSON));
+	}
 
-    @Test
-    public void testFindOwnersNotFound() throws Exception {
-        Page<Owner> emptyPage = new PageImpl<>(Collections.emptyList(), PageRequest.of(0, 5), 0);
-        when(ownerRepository.findByLastName("Unknown", PageRequest.of(0, 5))).thenReturn(emptyPage);
+	@Test
+	public void testFindOwnersNotFound() throws Exception {
+		Page<Owner> emptyPage = new PageImpl<>(Collections.emptyList(), PageRequest.of(0, 5), 0);
+		when(ownerRepository.findByLastName("Unknown", PageRequest.of(0, 5))).thenReturn(emptyPage);
 
-        mockMvc.perform(get("/api/owners/find")
-                .param("page", "1")
-                .param("lastName", "Unknown")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
-    }
+		mockMvc
+			.perform(get("/api/owners/find").param("page", "1")
+				.param("lastName", "Unknown")
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNoContent());
+	}
+
 }
